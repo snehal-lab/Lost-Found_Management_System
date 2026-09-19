@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Lost & Found Management System</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .navbar {
+            background: white;
+            padding: 15px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+            flex-wrap: wrap;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.08);
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #334155;
+
+            padding: 9px 15px;
+            border-radius: 7px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .nav-links a.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #6366f1
+                );
+
+            color: white;
+
+            padding: 80px 20px;
+
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: #c7d2fe;
+        }
+
+        .hero p {
+            max-width: 750px;
+            margin: auto;
+
+            line-height: 1.7;
+            font-size: 16px;
+
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+
+            gap: 12px;
+
+            margin-top: 30px;
+
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            text-decoration: none;
+
+            padding: 13px 22px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .primary-btn {
+            background: white;
+            color: #4f46e5;
+        }
+
+        .secondary-btn {
+            border: 1px solid white;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #eef2ff;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* =========================
+           FEATURES
+        ========================= */
+
+        .section {
+            max-width: 1200px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns:
+                repeat(5, 1fr);
+            gap: 18px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px 18px;
+
+            border-radius: 13px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0, 0, 0, 0.06);
+
+            text-align: center;
+
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            background: #eef2ff;
+            color: #4f46e5;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            margin-bottom: 9px;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           WORKFLOW
+        ========================= */
+
+        .workflow {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .step {
+            background: white;
+            padding: 22px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .step-number {
+            width: 35px;
+            height: 35px;
+
+            border-radius: 50%;
+
+            background: #4f46e5;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+        }
+
+        .step h3 {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .step p {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #1e293b;
+            color: #cbd5e1;
+
+            padding: 20px;
+
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1050px) {
+
+            .features {
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .features {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .workflow {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .features,
+            .workflow {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                flex-direction: column;
+            }
+
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Lost & Found
+    </div>
+
+    <div class="nav-links">
+
+        <a
+            href="index.html"
+            class="active"
+        >
+            Home
+        </a>
+
+        <a href="add.html">
+            Add Report
+        </a>
+
+        <a href="reports.html">
+            View Reports
+        </a>
+
+        <a href="search.html">
+            Search & Filter
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <h1>
+        Lost & Found
+        <span>Management System</span>
+    </h1>
+
+    <p>
+
+        Easily report lost or found items,
+        search and filter reports, identify
+        possible matches, and track the status
+        of reported items.
+
+    </p>
+
+
+    <div class="hero-buttons">
+
+        <a
+            href="add.html"
+            class="hero-btn primary-btn"
+        >
+            + Add New Report
+        </a>
+
+        <a
+            href="reports.html"
+            class="hero-btn secondary-btn"
+        >
+            View Reports
+        </a>
+
+        <a
+            href="search.html"
+            class="hero-btn secondary-btn"
+        >
+            Search Items
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            System Features
+        </h2>
+
+        <p>
+            Five assigned features implemented
+            in the project.
+        </p>
+
+    </div>
+
+
+    <div class="features">
+
+
+        <div class="feature-card">
+
+            <div class="icon">+</div>
+
+            <h3>
+                Add / Edit / Delete
+            </h3>
+
+            <p>
+                Manage Lost and Found item
+                reports easily.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">#</div>
+
+            <h3>
+                Category Selection
+            </h3>
+
+            <p>
+                Select an appropriate category
+                for every item.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">⌕</div>
+
+            <h3>
+                Search & Filter
+            </h3>
+
+            <p>
+                Search reports and filter them
+                by category, type and status.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">⇄</div>
+
+            <h3>
+                Match Items
+            </h3>
+
+            <p>
+                Find possible Lost and Found
+                item matches.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">✓</div>
+
+            <h3>
+                Status Tracking
+            </h3>
+
+            <p>
+                Track Pending, Matched,
+                Returned and Closed reports.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     WORKFLOW
+========================= -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <h2>
+            How It Works
+        </h2>
+
+        <p>
+            Simple steps to manage an item report.
+        </p>
+
+    </div>
+
+
+    <div class="workflow">
+
+
+        <div class="step">
+
+            <div class="step-number">1</div>
+
+            <h3>
+                Add Report
+            </h3>
+
+            <p>
+                Enter the Lost or Found item
+                information.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">2</div>
+
+            <h3>
+                Search
+            </h3>
+
+            <p>
+                Search and filter the existing
+                reports.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">3</div>
+
+            <h3>
+                Match
+            </h3>
+
+            <p>
+                Check for possible matching
+                Lost and Found records.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">4</div>
+
+            <h3>
+                Track Status
+            </h3>
+
+            <p>
+                Update the item status until
+                the report is completed.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    Lost & Found Management System
+    &copy; 2026
+
+</footer>
+
+
+</body>
+
+</html>

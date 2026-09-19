@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search & Filter - Lost & Found</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8fafc
+                );
+
+            min-height: 100vh;
+
+            color: #1e293b;
+        }
+
+
+        /* ==========================
+           NAVIGATION
+        ========================== */
+
+        .main-nav {
+            background: white;
+
+            padding: 14px 30px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.06);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+        }
+
+
+        .main-nav a {
+            text-decoration: none;
+
+            color: #334155;
+
+            padding: 10px 18px;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+
+        .main-nav a:hover {
+            background: #eef2ff;
+
+            color: #4f46e5;
+        }
+
+
+        .main-nav a.active {
+            background: #4f46e5;
+
+            color: white;
+        }
+
+
+        /* ==========================
+           HEADER
+        ========================== */
+
+        .top-header {
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #6366f1
+                );
+
+            color: white;
+
+            padding: 32px 20px;
+
+            text-align: center;
+        }
+
+
+        .top-header h1 {
+            font-size: 30px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .top-header p {
+            font-size: 15px;
+
+            opacity: 0.9;
+        }
+
+
+        /* ==========================
+           CONTAINER
+        ========================== */
+
+        .container {
+            width: 100%;
+
+            max-width: 1450px;
+
+            margin: 35px auto;
+
+            padding: 0 20px;
+        }
+
+
+        /* ==========================
+           SEARCH CARD
+        ========================== */
+
+        .search-card {
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 6px 22px
+                rgba(0, 0, 0, 0.07);
+
+            margin-bottom: 25px;
+        }
+
+
+        .search-card h2 {
+            font-size: 22px;
+
+            margin-bottom: 7px;
+
+            color: #1e293b;
+        }
+
+
+        .search-card .subtitle {
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ==========================
+           FORM
+        ========================== */
+
+        .filter-grid {
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr 1fr 1fr;
+
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .form-group {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .form-group label {
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #475569;
+
+            margin-bottom: 8px;
+        }
+
+
+        input,
+        select {
+            width: 100%;
+
+            padding: 12px 13px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            background: white;
+
+            color: #1e293b;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+
+        input:focus,
+        select:focus {
+            border-color: #4f46e5;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    79,
+                    70,
+                    229,
+                    0.10
+                );
+        }
+
+
+        /* ==========================
+           BUTTONS
+        ========================== */
+
+        .button-row {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .btn {
+            border: none;
+
+            padding: 12px 22px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+
+        .search-btn {
+            background: #4f46e5;
+
+            color: white;
+        }
+
+
+        .search-btn:hover {
+            background: #4338ca;
+        }
+
+
+        .clear-btn {
+            background: #e2e8f0;
+
+            color: #334155;
+        }
+
+
+        .clear-btn:hover {
+            background: #cbd5e1;
+        }
+
+
+        /* ==========================
+           RESULT INFO
+        ========================== */
+
+        .result-info {
+            background: #eef2ff;
+
+            border:
+                1px solid #c7d2fe;
+
+            color: #3730a3;
+
+            padding: 13px 16px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* ==========================
+           RESULTS CARD
+        ========================== */
+
+        .results-card {
+            background: white;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 6px 22px
+                rgba(0, 0, 0, 0.07);
+        }
+
+
+        .results-header {
+            padding: 22px 25px;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .results-header h2 {
+            font-size: 21px;
+        }
+
+
+        .results-header a {
+            text-decoration: none;
+
+            color: #4338ca;
+
+            background: #eef2ff;
+
+            padding: 9px 15px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .results-header a:hover {
+            background: #e0e7ff;
+        }
+
+
+        /* ==========================
+           TABLE
+        ========================== */
+
+        .table-container {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+
+            min-width: 1250px;
+
+            border-collapse: collapse;
+        }
+
+
+        thead {
+            background: #f8fafc;
+        }
+
+
+        th {
+            padding: 15px 12px;
+
+            text-align: left;
+
+            font-size: 13px;
+
+            color: #475569;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            white-space: nowrap;
+        }
+
+
+        td {
+            padding: 15px 12px;
+
+            font-size: 13px;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            vertical-align: middle;
+        }
+
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+
+        /* ==========================
+           BADGES
+        ========================== */
+
+        .badge {
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .lost-badge {
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+
+        .found-badge {
+            background: #dcfce7;
+
+            color: #15803d;
+        }
+
+
+        .pending-badge {
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+
+        .matched-badge {
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        .returned-badge {
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+
+        .closed-badge {
+            background: #e2e8f0;
+
+            color: #475569;
+        }
+
+
+        /* ==========================
+           MESSAGE
+        ========================== */
+
+        .message {
+            padding: 40px 20px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+
+        .error-message {
+            margin: 20px;
+
+            padding: 14px;
+
+            text-align: left;
+
+            border-radius: 8px;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            border:
+                1px solid #fca5a5;
+        }
+
+
+        /* ==========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 1050px) {
+
+            .filter-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .main-nav {
+                padding:
+                    12px 10px;
+
+                flex-direction:
+                    column;
+            }
+
+
+            .main-nav a {
+                width: 100%;
+
+                text-align: center;
+            }
+
+
+            .top-header {
+                padding:
+                    25px 15px;
+            }
+
+
+            .top-header h1 {
+                font-size: 24px;
+            }
+
+
+            .container {
+                padding:
+                    0 10px;
+
+                margin-top: 20px;
+            }
+
+
+            .search-card {
+                padding: 20px;
+            }
+
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .button-row {
+                flex-direction:
+                    column;
+            }
+
+
+            .btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================
+     NAVIGATION
+================================== -->
+
+<nav class="main-nav">
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="add.html">
+        Add Report
+    </a>
+
+    <a href="reports.html">
+        View Reports
+    </a>
+
+    <a
+        href="search.html"
+        class="active"
+    >
+        Search & Filter
+    </a>
+
+</nav>
+
+
+
+<!-- ==================================
+     HEADER
+================================== -->
+
+<header class="top-header">
+
+    <h1>
+        Search & Filter Items
+    </h1>
+
+    <p>
+        Find Lost and Found reports quickly
+    </p>
+
+</header>
+
+
+
+<!-- ==================================
+     MAIN
+================================== -->
+
+<div class="container">
+
+
+    <!-- ==================================
+         SEARCH CARD
+    ================================== -->
+
+    <div class="search-card">
+
+        <h2>
+            Search Reports
+        </h2>
+
+        <p class="subtitle">
+            Search by keyword or filter reports
+            using category, type and status.
+        </p>
+
+
+        <form id="searchForm">
+
+
+            <div class="filter-grid">
+
+
+                <!-- KEYWORD -->
+
+                <div class="form-group">
+
+                    <label for="keyword">
+                        Search Keyword
+                    </label>
+
+                    <input
+                        type="text"
+                        id="keyword"
+                        name="keyword"
+                        placeholder="Item name, description, location or person"
+                    >
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                    >
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        <option value="Electronics">
+                            Electronics
+                        </option>
+
+                        <option value="Documents">
+                            Documents
+                        </option>
+
+                        <option value="Bags">
+                            Bags
+                        </option>
+
+                        <option value="Books">
+                            Books
+                        </option>
+
+                        <option value="Personal">
+                            Personal
+                        </option>
+
+                        <option value="Accessories">
+                            Accessories
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TYPE -->
+
+                <div class="form-group">
+
+                    <label for="type">
+                        Type
+                    </label>
+
+                    <select
+                        id="type"
+                        name="type"
+                    >
+
+                        <option value="">
+                            All Types
+                        </option>
+
+                        <option value="Lost">
+                            Lost
+                        </option>
+
+                        <option value="Found">
+                            Found
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label for="status">
+                        Status
+                    </label>
+
+                    <select
+                        id="status"
+                        name="status"
+                    >
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="Matched">
+                            Matched
+                        </option>
+
+                        <option value="Returned">
+                            Returned
+                        </option>
+
+                        <option value="Closed">
+                            Closed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-row">
+
+
+                <button
+                    type="button"
+                    class="btn clear-btn"
+                    onclick="clearFilters()"
+                >
+                    Clear Filters
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn search-btn"
+                >
+                    Search Items
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- ==================================
+         RESULT COUNT
+    ================================== -->
+
+    <div
+        id="resultInfo"
+        class="result-info"
+    >
+        Loading reports...
+    </div>
+
+
+
+    <!-- ==================================
+         RESULTS
+    ================================== -->
+
+    <div class="results-card">
+
+
+        <div class="results-header">
+
+            <h2>
+                Search Results
+            </h2>
+
+
+            <a href="reports.html">
+                View All Reports
+            </a>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Item Name
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Person
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="resultsBody"
+                >
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="message"
+            class="message"
+        >
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* ==================================
+   ELEMENTS
+================================== */
+
+const searchForm =
+    document.getElementById(
+        "searchForm"
+    );
+
+
+const resultsBody =
+    document.getElementById(
+        "resultsBody"
+    );
+
+
+const resultInfo =
+    document.getElementById(
+        "resultInfo"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+/* ==================================
+   SEARCH REPORTS
+================================== */
+
+function searchItems() {
+
+
+    const keyword =
+        document.getElementById(
+            "keyword"
+        ).value.trim();
+
+
+    const category =
+        document.getElementById(
+            "category"
+        ).value;
+
+
+    const type =
+        document.getElementById(
+            "type"
+        ).value;
+
+
+    const status =
+        document.getElementById(
+            "status"
+        ).value;
+
+
+    /* Create query */
+
+    const params =
+        new URLSearchParams();
+
+
+    if (keyword !== "") {
+
+        params.append(
+            "keyword",
+            keyword
+        );
+
+    }
+
+
+    if (category !== "") {
+
+        params.append(
+            "category",
+            category
+        );
+
+    }
+
+
+    if (type !== "") {
+
+        params.append(
+            "type",
+            type
+        );
+
+    }
+
+
+    if (status !== "") {
+
+        params.append(
+            "status",
+            status
+        );
+
+    }
+
+
+    /* Loading */
+
+    resultsBody.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="10"
+                style="
+                    text-align:center;
+                    padding:40px;
+                    color:#64748b;
+                "
+            >
+                Searching...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    message.style.display =
+        "none";
+
+
+    resultInfo.textContent =
+        "Searching reports...";
+
+
+    /* API */
+
+    fetch(
+        "../backend/search_reports.php?" +
+        params.toString()
+    )
+
+
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server error: " +
+                response.status
+            );
+
+        }
+
+
+        return response.json();
+
+    })
+
+
+    .then(result => {
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "Search failed."
+            );
+
+        }
+
+
+        const reports =
+            result.data || [];
+
+
+        displayResults(
+            reports
+        );
+
+
+        resultInfo.textContent =
+            "Found " +
+            reports.length +
+            " report(s).";
+
+    })
+
+
+    .catch(error => {
+
+        resultsBody.innerHTML =
+            "";
+
+
+        resultInfo.textContent =
+            "Unable to load results.";
+
+
+        message.textContent =
+            error.message;
+
+
+        message.className =
+            "message error-message";
+
+
+        message.style.display =
+            "block";
+
+    });
+
+}
+
+
+
+/* ==================================
+   DISPLAY RESULTS
+================================== */
+
+function displayResults(
+    reports
+) {
+
+
+    resultsBody.innerHTML =
+        "";
+
+
+    if (
+        !reports ||
+        reports.length === 0
+    ) {
+
+        message.textContent =
+            "No matching reports found.";
+
+
+        message.className =
+            "message";
+
+
+        message.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+    message.style.display =
+        "none";
+
+
+    reports.forEach(
+        function(report) {
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            /* ==========================
+               TYPE
+            ========================== */
+
+            let typeBadge = "";
+
+
+            if (
+                report.type === "Lost"
+            ) {
+
+                typeBadge = `
+
+                    <span
+                        class="badge lost-badge"
+                    >
+                        Lost
+                    </span>
+
+                `;
+
+            } else {
+
+                typeBadge = `
+
+                    <span
+                        class="badge found-badge"
+                    >
+                        Found
+                    </span>
+
+                `;
+
+            }
+
+
+            /* ==========================
+               STATUS
+            ========================== */
+
+            const statusClass =
+                getStatusClass(
+                    report.status
+                );
+
+
+            /* ==========================
+               ROW
+            ========================== */
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(
+                        report.id
+                    )}
+                </td>
+
+
+                <td>
+                    ${typeBadge}
+                </td>
+
+
+                <td>
+                    <strong>
+                        ${escapeHtml(
+                            report.item_name
+                        )}
+                    </strong>
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        report.description || "-"
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        report.category
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        report.location
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        report.report_date
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        report.person_name
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHtml(
+                        report.phone
+                    )}
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="
+                            badge
+                            ${statusClass}
+                        "
+                    >
+                        ${escapeHtml(
+                            report.status
+                        )}
+                    </span>
+
+                </td>
+
+            `;
+
+
+            resultsBody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+/* ==================================
+   STATUS CLASS
+================================== */
+
+function getStatusClass(
+    status
+) {
+
+    switch (status) {
+
+        case "Matched":
+
+            return "matched-badge";
+
+
+        case "Returned":
+
+            return "returned-badge";
+
+
+        case "Closed":
+
+            return "closed-badge";
+
+
+        default:
+
+            return "pending-badge";
+
+    }
+
+}
+
+
+
+/* ==================================
+   CLEAR FILTERS
+================================== */
+
+function clearFilters() {
+
+
+    document.getElementById(
+        "keyword"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "category"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "type"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "status"
+    ).value =
+        "";
+
+
+    searchItems();
+
+}
+
+
+
+/* ==================================
+   FORM SUBMIT
+================================== */
+
+searchForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        searchItems();
+
+    }
+);
+
+
+
+/* ==================================
+   ESCAPE HTML
+================================== */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+/* ==================================
+   LOAD ALL REPORTS
+================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        searchItems();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
